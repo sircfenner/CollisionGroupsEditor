@@ -1,10 +1,10 @@
 {
-	"name": "CollisionGroupEditor",
+	"name": "CollisionGroupsEditorDev",
 	"tree": {
 		"$className": "DataModel",
 		"ServerStorage": {
 			"$className": "ServerStorage",
-			"CollisionGroupEditor": {
+			"CollisionGroupsEditor": {
 				"$className": "Folder",
 				"Vendor": {
 					"$path": "vendor"

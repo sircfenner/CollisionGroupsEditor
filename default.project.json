@@ -1,5 +1,5 @@
 {
-	"name": "CollisionGroupEditor",
+	"name": "CollisionGroupsEditor",
 	"tree": {
 		"$className": "Folder",
 		"Vendor": {
