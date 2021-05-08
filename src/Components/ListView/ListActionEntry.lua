@@ -2,10 +2,10 @@ local Plugin = script.Parent.Parent.Parent
 
 local Roact = require(Plugin.Vendor.Roact)
 local Constants = require(Plugin.Constants)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
 
-local StudioComponents = Plugin.Vendor.StudioComponents
-local Label = require(StudioComponents.Label)
-local Checkbox = require(StudioComponents.Checkbox)
+local Label = StudioComponents.Label
+local Checkbox = StudioComponents.Checkbox
 
 local ENTRY_HEIGHT = Constants.ListEntryHeight
 local CHECKBOX_HEIGHT = Constants.CheckboxHeight

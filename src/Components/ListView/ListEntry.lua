@@ -1,10 +1,12 @@
 local Plugin = script.Parent.Parent.Parent
+local Constants = require(Plugin.Constants)
 
 local Roact = require(Plugin.Vendor.Roact)
-local StudioComponents = Plugin.Vendor.StudioComponents
-local withTheme = require(StudioComponents.withTheme)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
 
-local ENTRY_HEIGHT = 25
+local withTheme = StudioComponents.withTheme
+
+local ENTRY_HEIGHT = Constants.ListEntryHeight
 
 local ListEntry = Roact.Component:extend("ListEntry")
 

@@ -1,27 +1,25 @@
-local Plugin = script.Parent.Parent
-
-local Roact = require(Plugin.Vendor.Roact)
-
 local PhysicsService = game:GetService("PhysicsService")
 local RunService = game:GetService("RunService")
 
-local App = Roact.Component:extend("App")
+local Plugin = script.Parent.Parent
+local Constants = require(Plugin.Constants)
 
-local Button = require(Plugin.Vendor.StudioComponents.Button)
-local MainButton = require(Plugin.Vendor.StudioComponents.MainButton)
+local Roact = require(Plugin.Vendor.Roact)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
 
+local Button = StudioComponents.Button
+local MainButton = StudioComponents.MainButton
 local ListView = require(script.Parent.ListView)
 local GridView = require(script.Parent.GridView)
 local TabButton = require(script.Parent.TabButton)
-
 local DeleteGroupWidget = require(script.Parent.DeleteGroupWidget)
 local GroupNameWidget = require(script.Parent.GroupNameWidget)
 local AddToGroup = require(script.Parent.AddToGroup)
 
 local MAX_GROUPS = PhysicsService:GetMaxCollisionGroups()
-local POLL_INTERVAL = 2
+local POLL_INTERVAL = Constants.PollInterval
 
-local setGroupsCollidable = require(Plugin.setGroupsCollidable)
+local App = Roact.Component:extend("App")
 
 function App:init()
 	local groups = PhysicsService:GetCollisionGroups()
@@ -34,13 +32,25 @@ function App:init()
 		DeletingGroup = false,
 	})
 	self.setGroupsCollidable = function(id0, id1, collidable)
-		setGroupsCollidable(id0, id1, collidable)
+		local success, response = pcall(function()
+			local name0 = PhysicsService:GetCollisionGroupName(id0)
+			local name1 = PhysicsService:GetCollisionGroupName(id1)
+			return PhysicsService:CollisionGroupSetCollidable(name0, name1, collidable)
+		end)
+		if not success then
+			warn(response)
+		end
 		self:updateGroups()
 	end
 	self.batchSetCollisionGroup = function(instances, id)
-		local name = PhysicsService:GetCollisionGroupName(id)
-		for _, instance in ipairs(instances) do
-			PhysicsService:SetPartCollisionGroup(instance, name)
+		local success, response = pcall(function()
+			local name = PhysicsService:GetCollisionGroupName(id)
+			for _, instance in ipairs(instances) do
+				PhysicsService:SetPartCollisionGroup(instance, name)
+			end
+		end)
+		if not success then
+			warn(response)
 		end
 		self:updateGroups()
 	end

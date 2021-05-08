@@ -1,13 +1,12 @@
 local Plugin = script.Parent.Parent
-
-local Roact = require(Plugin.Vendor.Roact)
 local Constants = require(Plugin.Constants)
 
-local StudioComponents = Plugin.Vendor.StudioComponents
-local withTheme = require(StudioComponents.withTheme)
+local Roact = require(Plugin.Vendor.Roact)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
 
-local ScrollFrame = require(StudioComponents.ScrollFrame)
-local Label = require(StudioComponents.Label)
+local withTheme = StudioComponents.withTheme
+local ScrollFrame = StudioComponents.ScrollFrame
+local Label = StudioComponents.Label
 local GridItem = require(script.GridItem)
 
 local SIZE_LEFT = 75

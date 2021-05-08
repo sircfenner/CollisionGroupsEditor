@@ -1,14 +1,11 @@
 local Plugin = script.Parent
 
-local Vendor = Plugin.Vendor
-local Roact = require(Vendor.Roact)
-
-local Components = Plugin.Components
-local MainPlugin = require(Components.MainPlugin)
+local Roact = require(Plugin.Vendor.Roact)
+local MainPlugin = require(Plugin.Components.MainPlugin)
 
 local toolbar = plugin:CreateToolbar("Collision Groups")
 local button = toolbar:CreateButton(
-	"CollisionGroupsToggleWidget",
+	"thirdPartyCollisionGroupsToggleWidget",
 	"Collision Groups",
 	"rbxasset://textures/CollisionGroupsEditor/ToolbarIcon.png",
 	"Toggle Widget"

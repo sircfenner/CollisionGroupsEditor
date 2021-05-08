@@ -1,13 +1,13 @@
 local Plugin = script.Parent.Parent
-
-local Vendor = Plugin.Vendor
-local Roact = require(Vendor.Roact)
 local Constants = require(Plugin.Constants)
 
-local MainPlugin = Roact.Component:extend("MainPlugin")
+local Roact = require(Plugin.Vendor.Roact)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
 
-local Widget = require(Vendor.StudioComponents.Widget)
+local Widget = StudioComponents.Widget
 local App = require(Plugin.Components.App)
+
+local MainPlugin = Roact.Component:extend("MainPlugin")
 
 function MainPlugin:init()
 	self:setEnabled(false)

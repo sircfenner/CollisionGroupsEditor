@@ -1,15 +1,14 @@
 local Plugin = script.Parent.Parent
-
-local Vendor = Plugin.Vendor
-local Roact = require(Vendor.Roact)
 local Constants = require(Plugin.Constants)
 
-local StudioComponents = Vendor.StudioComponents
-local Widget = require(StudioComponents.Widget)
-local Label = require(StudioComponents.Label)
-local TextInput = require(StudioComponents.TextInput)
-local Button = require(StudioComponents.Button)
-local MainButton = require(StudioComponents.MainButton)
+local Roact = require(Plugin.Vendor.Roact)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
+
+local Widget = StudioComponents.Widget
+local Label = StudioComponents.Label
+local TextInput = StudioComponents.TextInput
+local Button = StudioComponents.Button
+local MainButton = StudioComponents.MainButton
 
 local PhysicsService = game:GetService("PhysicsService")
 local GroupNameWidget = Roact.Component:extend("GroupNameWidget")

@@ -1,8 +1,9 @@
 local Plugin = script.Parent.Parent
 
 local Roact = require(Plugin.Vendor.Roact)
-local StudioComponents = Plugin.Vendor.StudioComponents
-local withTheme = require(StudioComponents.withTheme)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
+
+local withTheme = StudioComponents.withTheme
 
 local TabButton = Roact.Component:extend("TabButton")
 

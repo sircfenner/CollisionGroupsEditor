@@ -1,9 +1,12 @@
+local SelectionService = game:GetService("Selection")
+
 local Plugin = script.Parent.Parent
 
 local Roact = require(Plugin.Vendor.Roact)
-local Button = require(Plugin.Vendor.StudioComponents.Button)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
 
-local SelectionService = game:GetService("Selection")
+local Button = StudioComponents.Button
+
 local AddToGroup = Roact.Component:extend("AddToGroup")
 
 function AddToGroup:init()

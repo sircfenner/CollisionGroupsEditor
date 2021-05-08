@@ -1,10 +1,9 @@
 local Plugin = script.Parent.Parent
 
 local Roact = require(Plugin.Vendor.Roact)
+local StudioComponents = require(Plugin.Vendor.StudioComponents)
 
-local StudioComponents = Plugin.Vendor.StudioComponents
-local ScrollFrame = require(StudioComponents.ScrollFrame)
-
+local ScrollFrame = StudioComponents.ScrollFrame
 local ListEntry = require(script.ListEntry)
 local ListActionEntry = require(script.ListActionEntry)
 
