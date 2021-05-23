@@ -14,9 +14,7 @@ local PhysicsService = game:GetService("PhysicsService")
 local GroupNameWidget = Roact.Component:extend("GroupNameWidget")
 
 function GroupNameWidget:init()
-	self:setState({
-		LastText = "",
-	})
+	self:setState({ LastText = "" })
 end
 
 function GroupNameWidget:render()
@@ -70,9 +68,7 @@ function GroupNameWidget:render()
 				PlaceholderText = "Enter name",
 				Text = self.state.LastText,
 				OnChanged = function(text)
-					self:setState({
-						LastText = text,
-					})
+					self:setState({ LastText = text })
 				end,
 				OnFocusLost = function(enterPressed)
 					if enterPressed and valid then

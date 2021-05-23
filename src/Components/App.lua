@@ -256,9 +256,7 @@ function App:render()
 					Size = UDim2.new(0, 28, 1, 0),
 					Text = "",
 					OnActivated = function()
-						self:setState({
-							CreatingGroup = true,
-						})
+						self:setState({ CreatingGroup = true })
 					end,
 					Disabled = isModalActive or isMaxGroups,
 				}, {
@@ -281,9 +279,7 @@ function App:render()
 					Size = UDim2.new(0.32, -18, 1, 0),
 					Text = "Rename",
 					OnActivated = function()
-						self:setState({
-							RenamingGroup = true,
-						})
+						self:setState({ RenamingGroup = true })
 					end,
 					Disabled = self.state.SelectedGroupId == 0 or isModalActive,
 				}),
@@ -292,9 +288,7 @@ function App:render()
 					Size = UDim2.new(0.3, -18, 1, 0),
 					Text = "Delete",
 					OnActivated = function()
-						self:setState({
-							DeletingGroup = true,
-						})
+						self:setState({ DeletingGroup = true })
 					end,
 					Disabled = self.state.SelectedGroupId == 0 or isModalActive,
 				}),

@@ -10,9 +10,7 @@ local Button = StudioComponents.Button
 local AddToGroup = Roact.Component:extend("AddToGroup")
 
 function AddToGroup:init()
-	self:setState({
-		Selection = SelectionService:Get(),
-	})
+	self:setState({ Selection = SelectionService:Get() })
 	self.onActivated = function()
 		local targets = {}
 		local targetId = self.props.SelectedGroupId
@@ -27,9 +25,7 @@ end
 
 function AddToGroup:didMount()
 	self.selectionChanged = SelectionService.SelectionChanged:Connect(function()
-		self:setState({
-			Selection = SelectionService:Get(),
-		})
+		self:setState({ Selection = SelectionService:Get() })
 	end)
 end
 
