@@ -148,7 +148,7 @@ function App:didMount()
 	self.pollConnection = RunService.Heartbeat:Connect(function()
 		if os.clock() >= nextCheck then
 			local lastGroups = self.state.Groups
-			local nextGroups = PhysicsService:GetCollisionGroups()
+			local nextGroups = PhysicsService:GetRegisteredCollisionGroups()
 			if areGroupsDifferent(lastGroups, nextGroups) then
 				self:updateGroups()
 			end
