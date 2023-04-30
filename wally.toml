@@ -1,0 +1,9 @@
+[package]
+name = "n/a"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Roact = "roblox/roact@1.4.4"
+StudioComponents = "sircfenner/studiocomponents@0.1.4"

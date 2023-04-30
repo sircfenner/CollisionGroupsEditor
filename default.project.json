@@ -1,10 +1,10 @@
 {
-	"name": "CollisionGroupsEditor",
-	"tree": {
-		"$className": "Folder",
-		"Vendor": {
-			"$path": "vendor"
-		},
-		"$path": "src"
-	}
+    "name": "CollisionGroupsEditor",
+    "tree": {
+        "$className": "Folder",
+        "Packages": {
+            "$path": "Packages"
+        },
+        "$path": "src"
+    }
 }

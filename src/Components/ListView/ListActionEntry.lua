@@ -1,8 +1,8 @@
 local Plugin = script.Parent.Parent.Parent
-
-local Roact = require(Plugin.Vendor.Roact)
 local Constants = require(Plugin.Constants)
-local StudioComponents = require(Plugin.Vendor.StudioComponents)
+
+local Roact = require(Plugin.Packages.Roact)
+local StudioComponents = require(Plugin.Packages.StudioComponents)
 
 local Label = StudioComponents.Label
 local Checkbox = StudioComponents.Checkbox

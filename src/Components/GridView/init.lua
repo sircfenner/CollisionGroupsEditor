@@ -3,8 +3,8 @@ local TextService = game:GetService("TextService")
 local Plugin = script.Parent.Parent
 local Constants = require(Plugin.Constants)
 
-local Roact = require(Plugin.Vendor.Roact)
-local StudioComponents = require(Plugin.Vendor.StudioComponents)
+local Roact = require(Plugin.Packages.Roact)
+local StudioComponents = require(Plugin.Packages.StudioComponents)
 
 local withTheme = StudioComponents.withTheme
 local ScrollFrame = StudioComponents.ScrollFrame
@@ -121,7 +121,8 @@ function GridView:render()
 				Size = UDim2.fromOffset(0, 14),
 				Text = group.name,
 				Font = highlighted and Enum.Font.SourceSansBold or Enum.Font.SourceSans,
-				TextColorStyle = highlighted and Enum.StudioStyleGuideColor.BrightText or Enum.StudioStyleGuideColor.MainText,
+				TextColorStyle = highlighted and Enum.StudioStyleGuideColor.BrightText
+					or Enum.StudioStyleGuideColor.MainText,
 				TextXAlignment = Enum.TextXAlignment.Right,
 				TextYAlignment = Enum.TextYAlignment.Bottom,
 				Disabled = self.props.Disabled,
@@ -138,7 +139,8 @@ function GridView:render()
 			Size = UDim2.new(1, 0, 0, CELL_SIZE.y),
 			Text = group.name,
 			Font = highlighted and Enum.Font.SourceSansBold or Enum.Font.SourceSans,
-			TextColorStyle = highlighted and Enum.StudioStyleGuideColor.BrightText or Enum.StudioStyleGuideColor.MainText,
+			TextColorStyle = highlighted and Enum.StudioStyleGuideColor.BrightText
+				or Enum.StudioStyleGuideColor.MainText,
 			TextXAlignment = Enum.TextXAlignment.Right,
 			Disabled = self.props.Disabled,
 		})

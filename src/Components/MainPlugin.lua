@@ -1,8 +1,8 @@
 local Plugin = script.Parent.Parent
 local Constants = require(Plugin.Constants)
 
-local Roact = require(Plugin.Vendor.Roact)
-local StudioComponents = require(Plugin.Vendor.StudioComponents)
+local Roact = require(Plugin.Packages.Roact)
+local StudioComponents = require(Plugin.Packages.StudioComponents)
 
 local Widget = StudioComponents.Widget
 local App = require(Plugin.Components.App)
@@ -29,18 +29,19 @@ function MainPlugin:willUnmount()
 end
 
 function MainPlugin:render()
-	return self.state.Enabled and Roact.createElement(Widget, {
-		Id = Constants.MainWidgetId,
-		Name = Constants.MainWidgetId,
-		Title = "Collision Groups",
-		InitialDockState = Enum.InitialDockState.Float,
-		MinimumWindowSize = Vector2.new(220, 175),
-		OnClosed = function()
-			self:setEnabled(false)
-		end,
-	}, {
-		App = Roact.createElement(App),
-	})
+	return self.state.Enabled
+		and Roact.createElement(Widget, {
+			Id = Constants.MainWidgetId,
+			Name = Constants.MainWidgetId,
+			Title = "Collision Groups",
+			InitialDockState = Enum.InitialDockState.Float,
+			MinimumWindowSize = Vector2.new(220, 175),
+			OnClosed = function()
+				self:setEnabled(false)
+			end,
+		}, {
+			App = Roact.createElement(App),
+		})
 end
 
 return MainPlugin

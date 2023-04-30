@@ -1,16 +1,16 @@
 {
-	"name": "CollisionGroupsEditorDev",
-	"tree": {
-		"$className": "DataModel",
-		"ServerStorage": {
-			"$className": "ServerStorage",
-			"CollisionGroupsEditor": {
-				"$className": "Folder",
-				"Vendor": {
-					"$path": "vendor"
-				},
-				"$path": "src"
-			}
-		}
-	}
+    "name": "CollisionGroupsEditorDev",
+    "tree": {
+        "$className": "DataModel",
+        "ServerStorage": {
+            "$className": "ServerStorage",
+            "CollisionGroupsEditor": {
+                "$className": "Folder",
+                "Packages": {
+                    "$path": "Packages"
+                },
+                "$path": "src"
+            }
+        }
+    }
 }

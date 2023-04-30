@@ -1,6 +1,6 @@
 local Plugin = script.Parent
 
-local Roact = require(Plugin.Vendor.Roact)
+local Roact = require(Plugin.Packages.Roact)
 local MainPlugin = require(Plugin.Components.MainPlugin)
 
 local toolbar = plugin:CreateToolbar("Collision Groups")

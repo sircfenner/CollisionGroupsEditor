@@ -2,8 +2,8 @@ local SelectionService = game:GetService("Selection")
 
 local Plugin = script.Parent.Parent
 
-local Roact = require(Plugin.Vendor.Roact)
-local StudioComponents = require(Plugin.Vendor.StudioComponents)
+local Roact = require(Plugin.Packages.Roact)
+local StudioComponents = require(Plugin.Packages.StudioComponents)
 
 local Button = StudioComponents.Button
 
