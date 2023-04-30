@@ -36,7 +36,7 @@ function ListEntry:render()
 	end
 	return withTheme(function(theme)
 		return Roact.createElement("TextButton", {
-			LayoutOrder = self.props.Group.id,
+			LayoutOrder = self.props.Order,
 			AutoButtonColor = false,
 			BorderSizePixel = 0,
 			BackgroundColor3 = theme:GetColor(color),

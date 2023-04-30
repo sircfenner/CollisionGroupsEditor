@@ -19,7 +19,7 @@ end
 
 function GroupNameWidget:render()
 	local lastText = self.state.LastText
-	local groups = PhysicsService:GetCollisionGroups()
+	local groups = PhysicsService:GetRegisteredCollisionGroups()
 
 	local valid = true
 	local message = nil

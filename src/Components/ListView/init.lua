@@ -1,3 +1,5 @@
+local PhysicsService = game:GetService("PhysicsService")
+
 local Plugin = script.Parent.Parent
 
 local Roact = require(Plugin.Packages.Roact)
@@ -7,20 +9,19 @@ local ScrollFrame = StudioComponents.ScrollFrame
 local ListEntry = require(script.ListEntry)
 local ListActionEntry = require(script.ListActionEntry)
 
-local areGroupsCollidable = require(Plugin.areGroupsCollidable)
-
 local function ListView(props)
 	local childrenLeft = {}
 	local childrenRight = {}
-	for _, group in ipairs(props.Groups) do
-		local collides = areGroupsCollidable(props.SelectedGroupId, group.id)
+	for i, group in ipairs(props.Groups) do
+		local collides = PhysicsService:CollisionGroupsAreCollidable(props.SelectedGroupName, group.name)
 		table.insert(
 			childrenLeft,
 			Roact.createElement(ListEntry, {
+				Order = i,
 				Group = group,
-				Selected = group.id == props.SelectedGroupId,
+				Selected = group.name == props.SelectedGroupName,
 				OnActivated = function()
-					props.SetSelectedGroupId(group.id)
+					props.SetSelectedGroupName(group.name)
 				end,
 				Disabled = props.Disabled,
 			})
@@ -28,10 +29,11 @@ local function ListView(props)
 		table.insert(
 			childrenRight,
 			Roact.createElement(ListActionEntry, {
+				Order = i,
 				Group = group,
 				Collides = collides,
 				OnActivated = function()
-					props.SetGroupsCollidable(props.SelectedGroupId, group.id, not collides)
+					props.SetGroupsCollidable(props.SelectedGroupName, group.name, not collides)
 				end,
 				Disabled = props.Disabled,
 			})

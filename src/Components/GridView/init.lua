@@ -1,3 +1,4 @@
+local PhysicsService = game:GetService("PhysicsService")
 local TextService = game:GetService("TextService")
 
 local Plugin = script.Parent.Parent
@@ -20,8 +21,6 @@ local MARGIN_PADDING_TOP = 1
 local DIAGONAL_ANGLE = 35
 local CELL_SIZE = Constants.GridCellSize
 
-local areGroupsCollidable = require(Plugin.areGroupsCollidable)
-
 local function getTextSize(text)
 	local frameSize = Vector2.new(1e5, 1e5)
 	return TextService:GetTextSize(text, 14, Enum.Font.SourceSansBold, frameSize)
@@ -32,15 +31,15 @@ local GridView = Roact.Component:extend("GridView")
 function GridView:init()
 	self.scrollPosition, self.setScrollPosition = Roact.createBinding(Vector2.new(0, 0))
 	self:setState({
-		HoveredGroupId0 = -1,
-		HoveredGroupId1 = -1,
+		HoveredGroupName0 = "",
+		HoveredGroupName1 = "",
 	})
 end
 
 function GridView:render()
 	local groups = self.props.Groups
-	local hoveredId0 = self.state.HoveredGroupId0
-	local hoveredId1 = self.state.HoveredGroupId1
+	local hoveredName0 = self.state.HoveredGroupName0
+	local hoveredName1 = self.state.HoveredGroupName1
 
 	local leftMargin = MARGIN_MIN_LEFT
 	for _, group in ipairs(groups) do
@@ -60,33 +59,39 @@ function GridView:render()
 		end
 	end
 
+	local nameOrder = {}
+	for i, group in groups do
+		nameOrder[group.name] = i
+	end
+
 	local gridContent = {}
 	for i, group0 in ipairs(groups) do
 		local items = {}
 		for j = i, #groups do
 			local group1 = groups[j]
-			local collidable = areGroupsCollidable(group0.id, group1.id)
-			local highlighted = (group0.id == hoveredId0 and group1.id >= hoveredId1)
-				or (group1.id == hoveredId1 and group0.id <= hoveredId0)
+			local collidable = PhysicsService:CollisionGroupsAreCollidable(group0.name, group1.name)
+			local highlighted = (group0.name == hoveredName0 and nameOrder[group1.name] >= nameOrder[hoveredName1])
+				or (group1.name == hoveredName1 and nameOrder[group0.name] <= nameOrder[hoveredName0])
+
 			items[j] = Roact.createElement(GridItem, {
 				Disabled = self.props.Disabled,
 				LayoutOrder = #groups - j,
 				Highlighted = highlighted,
 				Collidable = collidable,
 				OnActivated = function()
-					self.props.SetGroupsCollidable(group0.id, group1.id, not collidable)
+					self.props.SetGroupsCollidable(group0.name, group1.name, not collidable)
 				end,
 				OnHoverBegan = function()
 					self:setState({
-						HoveredGroupId0 = group0.id,
-						HoveredGroupId1 = group1.id,
+						HoveredGroupName0 = group0.name,
+						HoveredGroupName1 = group1.name,
 					})
 				end,
 				OnHoverEnded = function()
-					if hoveredId0 == group0.id and hoveredId1 == group1.id then
+					if hoveredName0 == group0.name and hoveredName1 == group1.name then
 						self:setState({
-							HoveredGroupId0 = -1,
-							HoveredGroupId1 = -1,
+							HoveredGroupName0 = "",
+							HoveredGroupName1 = "",
 						})
 					end
 				end,
@@ -107,7 +112,7 @@ function GridView:render()
 
 	local headerContent0 = {}
 	for i, group in ipairs(groups) do
-		local highlighted = group.id == hoveredId1
+		local highlighted = group.name == hoveredName1
 		headerContent0[i] = Roact.createElement("Frame", {
 			LayoutOrder = #groups - i,
 			Size = UDim2.new(0, CELL_SIZE.x, 1, 0),
@@ -132,7 +137,7 @@ function GridView:render()
 
 	local headerContent1 = {}
 	for i, group in ipairs(groups) do
-		local highlighted = group.id == hoveredId0
+		local highlighted = group.name == hoveredName0
 		headerContent1[i] = Roact.createElement(Label, {
 			LayoutOrder = i,
 			BackgroundTransparency = 1,
@@ -183,7 +188,7 @@ function GridView:render()
 				AnchorPoint = Vector2.new(1, 1),
 				Position = UDim2.fromOffset(leftMargin, topMargin),
 				Size = UDim2.fromOffset(leftMargin, topMargin),
-				Image = "rbxassetid://6851894143", -- "rbxassetid://6688985828",
+				Image = "rbxassetid://6851894143",
 				ImageColor3 = theme:GetColor(Enum.StudioStyleGuideColor.MainBackground),
 			})
 		end),

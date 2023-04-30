@@ -21,20 +21,32 @@ local POLL_INTERVAL = Constants.PollInterval
 
 local App = Roact.Component:extend("App")
 
+local renameTargetAncestors = {
+	game:GetService("Workspace"),
+	game:GetService("Lighting"),
+	game:GetService("MaterialService"),
+	game:GetService("ReplicatedFirst"),
+	game:GetService("ReplicatedStorage"),
+	game:GetService("ServerScriptService"),
+	game:GetService("ServerStorage"),
+	game:GetService("StarterGui"),
+	game:GetService("StarterPack"),
+	game:GetService("StarterPlayer"),
+	game:GetService("SoundService"),
+}
+
 function App:init()
-	local groups = PhysicsService:GetCollisionGroups()
+	local groups = PhysicsService:GetRegisteredCollisionGroups()
 	self:setState({
 		View = "List",
 		Groups = groups,
-		SelectedGroupId = groups[1].id,
+		SelectedGroupName = groups[1].name,
 		CreatingGroup = false,
 		RenamingGroup = false,
 		DeletingGroup = false,
 	})
-	self.setGroupsCollidable = function(id0, id1, collidable)
+	self.setGroupsCollidable = function(name0, name1, collidable)
 		local success, response = pcall(function()
-			local name0 = PhysicsService:GetCollisionGroupName(id0)
-			local name1 = PhysicsService:GetCollisionGroupName(id1)
 			return PhysicsService:CollisionGroupSetCollidable(name0, name1, collidable)
 		end)
 		if not success then
@@ -42,11 +54,10 @@ function App:init()
 		end
 		self:updateGroups()
 	end
-	self.batchSetCollisionGroup = function(instances, id)
+	self.batchSetCollisionGroup = function(instances, name)
 		local success, response = pcall(function()
-			local name = PhysicsService:GetCollisionGroupName(id)
 			for _, instance in ipairs(instances) do
-				PhysicsService:SetPartCollisionGroup(instance, name)
+				instance.CollisionGroup = name
 			end
 		end)
 		if not success then
@@ -56,7 +67,7 @@ function App:init()
 	end
 	self.createCollisionGroup = function(name)
 		local success, response = pcall(function()
-			return PhysicsService:CreateCollisionGroup(name)
+			return PhysicsService:RegisterCollisionGroup(name)
 		end)
 		if not success then
 			warn(response)
@@ -70,32 +81,49 @@ function App:init()
 		if not success then
 			warn(response)
 		end
+		for _, ancestor in renameTargetAncestors do
+			for _, descendant in ancestor:GetDescendants() do
+				if descendant:IsA("BasePart") and descendant.CollisionGroup == oldName then
+					descendant.CollisionGroup = newName
+				end
+			end
+		end
+		if self.state.SelectedGroupName == oldName then
+			self:setState({ SelectedGroupName = newName })
+		end
 		self:updateGroups()
 	end
 	self.deleteCollisionGroup = function(name)
 		local success, response = pcall(function()
-			return PhysicsService:RemoveCollisionGroup(name)
+			return PhysicsService:UnregisterCollisionGroup(name)
 		end)
 		if not success then
 			warn(response)
+		end
+		for _, ancestor in renameTargetAncestors do
+			for _, descendant in ancestor:GetDescendants() do
+				if descendant:IsA("BasePart") and descendant.CollisionGroup == name then
+					descendant.CollisionGroup = "Default"
+				end
+			end
 		end
 		self:updateGroups()
 	end
 end
 
 function App:updateGroups()
-	local groups = PhysicsService:GetCollisionGroups()
-	local prevSelectedGroupId = self.state.SelectedGroupId
-	local nextSelectedGroupId
+	local groups = PhysicsService:GetRegisteredCollisionGroups()
+	local prevSelectedGroupName = self.state.SelectedGroupName
+	local nextSelectedGroupName
 	for _, group in ipairs(groups) do
-		if group.id == prevSelectedGroupId then
-			nextSelectedGroupId = prevSelectedGroupId
+		if group.name == prevSelectedGroupName then
+			nextSelectedGroupName = prevSelectedGroupName
 			break
 		end
 	end
 	self:setState({
 		Groups = groups,
-		SelectedGroupId = nextSelectedGroupId or groups[1].id,
+		SelectedGroupName = nextSelectedGroupName or groups[1].name,
 	})
 end
 
@@ -106,9 +134,7 @@ local function areGroupsDifferent(groups0, groups1)
 	for i = 1, #groups0 do
 		local item0 = groups0[i]
 		local item1 = groups1[i]
-		if item0.id ~= item1.id then
-			return true
-		elseif item0.name ~= item1.name then
+		if item0.name ~= item1.name then
 			return true
 		elseif item0.mask ~= item1.mask then
 			return true
@@ -138,11 +164,7 @@ end
 function App:render()
 	local isMaxGroups = #self.state.Groups >= MAX_GROUPS
 	local isModalActive = self.state.CreatingGroup or self.state.RenamingGroup or self.state.DeletingGroup
-
-	local selectedGroupName = nil
-	if self.state.SelectedGroupId then
-		selectedGroupName = PhysicsService:GetCollisionGroupName(self.state.SelectedGroupId)
-	end
+	local selectedGroupName = self.state.SelectedGroupName
 
 	return Roact.createFragment({
 		CreateWidget = self.state.CreatingGroup and Roact.createElement(GroupNameWidget, {
@@ -227,9 +249,9 @@ function App:render()
 			}, {
 				List = self.state.View == "List" and Roact.createElement(ListView, {
 					Groups = self.state.Groups,
-					SelectedGroupId = self.state.SelectedGroupId,
-					SetSelectedGroupId = function(id)
-						self:setState({ SelectedGroupId = id })
+					SelectedGroupName = self.state.SelectedGroupName,
+					SetSelectedGroupName = function(name)
+						self:setState({ SelectedGroupName = name })
 					end,
 					SetGroupsCollidable = self.setGroupsCollidable,
 					Disabled = isModalActive,
@@ -271,7 +293,7 @@ function App:render()
 				}),
 				AddTo = self.state.View == "List" and Roact.createElement(AddToGroup, {
 					BatchSetCollisionGroup = self.batchSetCollisionGroup,
-					SelectedGroupId = self.state.SelectedGroupId,
+					SelectedGroupName = self.state.SelectedGroupName,
 					Disabled = isModalActive,
 				}),
 				Rename = self.state.View == "List" and Roact.createElement(Button, {
@@ -281,7 +303,7 @@ function App:render()
 					OnActivated = function()
 						self:setState({ RenamingGroup = true })
 					end,
-					Disabled = self.state.SelectedGroupId == 0 or isModalActive,
+					Disabled = self.state.SelectedGroupName == "Default" or isModalActive,
 				}),
 				Delete = self.state.View == "List" and Roact.createElement(Button, {
 					LayoutOrder = 3,
@@ -290,7 +312,7 @@ function App:render()
 					OnActivated = function()
 						self:setState({ DeletingGroup = true })
 					end,
-					Disabled = self.state.SelectedGroupId == 0 or isModalActive,
+					Disabled = self.state.SelectedGroupName == "Default" or isModalActive,
 				}),
 			}),
 		}),

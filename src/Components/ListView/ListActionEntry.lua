@@ -12,7 +12,7 @@ local CHECKBOX_HEIGHT = Constants.CheckboxHeight
 
 local function ListActionEntry(props)
 	return Roact.createElement("Frame", {
-		LayoutOrder = props.Group.id,
+		LayoutOrder = props.Order,
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, ENTRY_HEIGHT),
 	}, {

@@ -13,13 +13,13 @@ function AddToGroup:init()
 	self:setState({ Selection = SelectionService:Get() })
 	self.onActivated = function()
 		local targets = {}
-		local targetId = self.props.SelectedGroupId
+		local targetGroupName = self.props.SelectedGroupName
 		for _, instance in ipairs(self.state.Selection) do
-			if instance:IsA("BasePart") and instance.CollisionGroupId ~= targetId then
+			if instance:IsA("BasePart") and instance.CollisionGroup ~= targetGroupName then
 				table.insert(targets, instance)
 			end
 		end
-		self.props.BatchSetCollisionGroup(targets, targetId)
+		self.props.BatchSetCollisionGroup(targets, targetGroupName)
 	end
 end
 
@@ -35,11 +35,11 @@ end
 
 function AddToGroup:render()
 	local valid = false
-	local targetId = self.props.SelectedGroupId
+	local targetGroupName = self.props.SelectedGroupName
 	for _, instance in ipairs(self.state.Selection) do
 		if not instance:IsA("BasePart") then
 			continue
-		elseif instance.CollisionGroupId ~= targetId then
+		elseif instance.CollisionGroup ~= targetGroupName then
 			valid = true
 			break
 		end
